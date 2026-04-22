@@ -1,108 +1,110 @@
-# Socialbot
-Code for socialbot‘s prototype
+![SocialBot Banner](./assets/banner.svg)
 
-> As for prototype, it is only the most basic model such as BERT. Users can retrain complex models in train.ipynb under each folder according to requirements, or directly download SOTA model and import it into corresponding folders, and then use python files with the same name in each folder to directly use it
+# SocialBot
 
-## README
+A multi-modal **emotion understanding prototype** that combines:
+- **Face** recognition pipeline
+- **Speech** emotion pipeline
+- **Text** sentiment/emotion pipeline
+- **LLM Agent** for final emotion fusion and judgment
 
-Welcome to the SocialBot project! This repository contains the source code for a social bot that incorporates multiple modalities (face, speech, text) and uses a Language Model (LLM) Agent for making judgments. Follow the instructions below to set up and use the SocialBot.
+> This repository is a research prototype. Baseline models are provided, and each modality can be retrained or replaced with stronger models.
 
-## Table of Contents
-- [Training](#training)
-  - [Face Modality](#face-modality)
-  - [Speech Modality](#speech-modality)
-  - [Text Modality](#text-modality)
-- [Recording](#recording)
-- [Data Input and Emotion Recognition](#data-input-and-emotion-recognition)
-- [Using LLM Agent](#using-llm-agent)
-- [Building Social Bot](#building-social-bot)
-- [Future Work](#future-work)
+---
 
-## Training
+## ✨ Highlights
 
-### Face Modality
+- Multi-source emotion signals (face, speech, text)
+- Intermediate result aggregation to `emotion.txt` and `emotion4GPT.txt`
+- LLM-assisted final emotion decision (`call.py`)
+- Modular folder structure for independent model iteration
 
-1. Navigate to the `face` directory:
-   ```bash
-   cd face
-   ```
+---
 
-2. Run the training script:
-   ```bash
-   python train.py
-   ```
+## 📦 Project Structure
 
-### Speech Modality
+```text
+socialbot/
+├── face/          # Face emotion pipeline + notebook
+├── speech/        # Audio recording & speech emotion pipeline + notebook
+├── text/          # Text input GUI + text emotion pipeline + notebook
+├── LLM/           # Resources for downstream socialbot integration
+├── call.py        # LLM-based final emotion decision
+├── clear.py       # Reset round output files
+├── emotion.txt    # Aggregated modality outputs
+└── emotion4GPT.txt# Prompt-ready fused context for LLM
+```
 
-1. Navigate to the `speech` directory:
-   ```bash
-   cd speech
-   ```
+---
 
-2. Run the training script:
-   ```bash
-   python train.py
-   ```
+## 🚀 Quick Start
 
-### Text Modality
+### 1) Reset previous round outputs
 
-1. Navigate to the `text` directory:
-   ```bash
-   cd text
-   ```
+```bash
+python clear.py
+```
 
-2. Run the training script:
-   ```bash
-   python train.py
-   ```
+### 2) Run each modality pipeline
 
-## Recording
+```bash
+python text/text.py
+python speech/recording.py
+python speech/speech.py
+python face/face.py
+```
 
-1. Run the recording script:
-   ```bash
-   python speech/recording.py
-   ```
+### 3) Run final LLM fusion
 
-## Data Input and Emotion Recognition
+```bash
+python call.py
+```
 
-1. Run the following scripts for data input and emotion recognition:
-   ```bash
-   python face/face.py
-   python speech/speech.py
-   python text/text.py
-   ```
+The final decision is written to `GPT.txt`.
 
-## Using LLM Agent
+---
 
-1. Run the LLM Agent script:
-   ```bash
-   python call.py
-   ```
+## 🧠 Training / Model Upgrade
 
-   Note: This step uses the LLM Agent for making judgments based on individual modalities(This step can be omitted if you want to use a multimodal model to obtain the emotion, or use the original model emotion or the emotion of a single mode).
+Each modality folder includes a `train.ipynb` notebook:
 
-## Resart the round
+- `face/train.ipynb`
+- `speech/train.ipynb`
+- `text/train.ipynb`
 
-1. Run the clear script:
-   ```bash
-   python clear.py
-   ```
+You can retrain baseline models or replace them with stronger checkpoints, then keep using the existing inference entry scripts.
 
-## Building Social Bot
+---
 
-1. Navigate to the `LLM` directory:
-   ```bash
-   cd LLM
-   ```
+## 🔄 Recommended End-to-End Workflow
 
-2. Implement the necessary operations to build the social bot using the provided outputs.
+1. Clear previous outputs (`clear.py`)
+2. Collect text input (`text/text.py`)
+3. Record and analyze speech (`speech/recording.py`, `speech/speech.py`)
+4. Detect facial emotion (`face/face.py`)
+5. Run LLM fusion (`call.py`)
+6. Consume outputs in your own application logic under `LLM/` or external services
 
-3. Customize the `call.py` script to call external APIs and compile the final results.
+---
 
-## Future Work
+## ⚠️ Notes
 
-- **Multi-Agent System Optimization:** Explore the use of a Multi-Agent system to optimize decision-making instead of a single Agent.
-- **LLM Personalization:** Enhance the LLM with more personalized operations to improve social bot interactions.
-- **Graphical User Interface (GUI):** Develop a user-friendly GUI to run all operations in a graphical environment.
+- Current scripts use several hardcoded Windows-style paths (e.g., `D:\socialbot\...`).
+- Before running on a new environment, update these paths to your local project location.
+- API integration in `call.py` is a baseline example and should be adapted to your preferred LLM SDK/API style.
 
-Congratulations! You have successfully set up and trained the SocialBot. Feel free to experiment and enhance the functionality as needed.
+---
+
+## 🛣️ Roadmap
+
+- Improve robustness with stronger modality-specific models
+- Add standardized config/CLI (remove hardcoded local paths)
+- Introduce reproducible environment setup (requirements / lockfile)
+- Build an integrated UI for one-click end-to-end inference
+
+---
+
+## 📄 License
+
+No explicit license file is currently provided in this repository.  
+Please add a license before production or external distribution use.
